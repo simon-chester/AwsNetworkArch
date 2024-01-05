@@ -45,7 +45,6 @@ Resources:
       Tags:
         - Key: "Name"
           Value: "PublicSubnet"
-      RouteTableId: !Ref PublicRouteTable
 
   PrivateSubnet:
     Type: AWS::EC2::Subnet
@@ -56,7 +55,6 @@ Resources:
       Tags:
         - Key: "Name"
           Value: "PrivateSubnet"
-      RouteTableId: !Ref PrivateRouteTable
 
   NatGatewayEIP:
     Type: AWS::EC2::EIP
@@ -99,6 +97,18 @@ Resources:
       RouteTableId: !Ref PrivateRouteTable
       DestinationCidrBlock: "0.0.0.0/0"
       NatGatewayId: !Ref NatGateway
+
+  AssociatePublicRouteTable:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref PublicSubnet
+      RouteTableId: !Ref PublicRouteTable
+
+  AssociatePrivateRouteTable:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref PrivateSubnet
+      RouteTableId: !Ref PrivateRouteTable
 
 Outputs:
   VPCId:
